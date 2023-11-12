@@ -15,6 +15,10 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +28,7 @@ function SignUp() {
     password: false,
     confirmPassword: false,
   });
+  const [userType, setUserType] = useState('');
 
   const handleToggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -33,14 +38,19 @@ function SignUp() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  const handleUserTypeChange = (event) => {
+    setUserType(event.target.value);
+  };
+
   const validateForm = (data) => {
     const errors = {
       email: !data.get('email'),
       password: !data.get('password'),
       confirmPassword: data.get('password') !== data.get('confirmPassword'),
+      userType: !userType,
     };
     setFormErrors(errors);
-    return !errors.email && !errors.password && !errors.confirmPassword;
+    return !errors.userType && !errors.email && !errors.password && !errors.confirmPassword;
   };
 
   const handleSubmit = (event) => {
@@ -48,6 +58,7 @@ function SignUp() {
     const data = new FormData(event.currentTarget);
     if (!validateForm(data)) return;
     console.log({
+      userType,
       email: data.get('email'),
       password: data.get('password'),
       // You can add additional fields here as needed
@@ -73,6 +84,21 @@ function SignUp() {
           Sign Up
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="user-type-label">User Type</InputLabel>
+            <Select
+              labelId="user-type-label"
+              id="user-type"
+              value={userType}
+              label="User Type"
+              onChange={handleUserTypeChange}
+              required
+            >
+              <MenuItem value={"artist"}>Artist</MenuItem>
+              <MenuItem value={"gallery"}>Gallery</MenuItem>
+              <MenuItem value={"general"}>General User</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
             margin="normal"
             required
