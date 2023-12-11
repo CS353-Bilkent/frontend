@@ -10,32 +10,26 @@ import { useState } from "react";
 import Header from "../components/Header";
 
 export default function UploadArtwork() {
-  const [fileList, setFileList] = useState(null);
+  const [file, setFile] = useState();
+  const [image, setImage] = useState();
 
-  const handleFileChange = (e) => {
-    setFileList(e.target.files);
-  };
+  function handleChange(e) {
+    console.log(e.target.files);
+    setFile(URL.createObjectURL(e.target.files[0]));
+    setImage(e.target.files[0]);
+  }
 
-  const handleUploadClick = () => {
-    if (!fileList) {
-      return;
-    }
-
-    const data = new FormData();
-    files.forEach((file, i) => {
-      data.append(`file-${i}`, file, file.name);
-    });
+  const handleImageUpload = (event) => {
+    const formData = new FormData();
+    formData.append("Image", image);
 
     fetch("https://httpbin.org/post", {
       method: "POST",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((err) => console.error(err));
+      body: formData,
+    }).catch((error) => {
+      console.error(error);
+    });
   };
-  const files = fileList ? [...fileList] : [];
-
   return (
     <>
       <Header />
@@ -79,7 +73,7 @@ export default function UploadArtwork() {
               justifyContent: "center",
               alignItems: "center",
               gap: 5,
-              height: "60vh",
+              height: "80vh",
               width: "80%",
               borderRadius: 5,
               boxShadow: 3,
@@ -99,7 +93,85 @@ export default function UploadArtwork() {
               rows={4}
               placeholder="Tell us about your artwork!"
               sx={{ width: "50%" }}
-            />{" "}
+            />
+            <Grid
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 5,
+                p: 3,
+                width: "100%",
+              }}
+            >
+              Details:
+              <TextField
+                id="outlined-basic"
+                label="Artwork Type"
+                variant="outlined"
+                sx={{ width: "20%" }}
+                placeholder="Enter artwork type"
+              />
+              <TextField
+                id="outlined-basic"
+                label="Rarity"
+                variant="outlined"
+                sx={{ width: "20%" }}
+                placeholder="Enter rarity"
+              />
+              <TextField
+                id="outlined-basic"
+                label="Medium"
+                variant="outlined"
+                sx={{ width: "20%" }}
+                placeholder="Enter medium"
+              />
+              <TextField
+                id="outlined-basic"
+                label="Movement"
+                variant="outlined"
+                sx={{ width: "20%" }}
+                placeholder="Enter movement"
+              />
+              <TextField
+                id="outlined-basic"
+                label="Material"
+                variant="outlined"
+                sx={{ width: "20%" }}
+                placeholder="Enter material"
+              />
+            </Grid>
+            <Grid
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 5,
+              }}
+            >
+              Sizes:
+              <TextField
+                id="outlined-basic"
+                label="Size (X)"
+                variant="outlined"
+                sx={{ width: "15%" }}
+                placeholder="Enter material"
+              />
+              <TextField
+                id="outlined-basic"
+                label="Size (Y)"
+                variant="outlined"
+                sx={{ width: "15%" }}
+                placeholder="Enter material"
+              />
+              <TextField
+                id="outlined-basic"
+                label="Size (Z)"
+                variant="outlined"
+                sx={{ width: "15%" }}
+                placeholder="Enter material"
+              />
+            </Grid>
             <Grid
               sx={{
                 display: "flex",
@@ -149,11 +221,22 @@ export default function UploadArtwork() {
                 />
               </Grid>
             </Grid>
-            <input type="file" onChange={handleFileChange} multiple />
+            <Grid
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "15px",
+              }}
+            >
+              <img src={file} width={"100"} />
+              <input type="file" onChange={handleChange} />
+            </Grid>
             <Button
               variant="contained"
               sx={{ width: "40%", backgroundColor: "#246d82" }}
-              onClick={handleUploadClick}
+              onClick={handleImageUpload}
             >
               Upload
             </Button>
