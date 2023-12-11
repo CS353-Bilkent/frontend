@@ -6,9 +6,36 @@ import {
   Button,
   Divider,
 } from "@mui/material";
+import { useState } from "react";
 import Header from "../components/Header";
 
 export default function UploadArtwork() {
+  const [fileList, setFileList] = useState(null);
+
+  const handleFileChange = (e) => {
+    setFileList(e.target.files);
+  };
+
+  const handleUploadClick = () => {
+    if (!fileList) {
+      return;
+    }
+
+    const data = new FormData();
+    files.forEach((file, i) => {
+      data.append(`file-${i}`, file, file.name);
+    });
+
+    fetch("https://httpbin.org/post", {
+      method: "POST",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err));
+  };
+  const files = fileList ? [...fileList] : [];
+
   return (
     <>
       <Header />
@@ -122,9 +149,11 @@ export default function UploadArtwork() {
                 />
               </Grid>
             </Grid>
+            <input type="file" onChange={handleFileChange} multiple />
             <Button
               variant="contained"
               sx={{ width: "40%", backgroundColor: "#246d82" }}
+              onClick={handleUploadClick}
             >
               Upload
             </Button>
