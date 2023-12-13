@@ -9,6 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
+import { Link } from "react-router-dom";
 
 const pages = ["Home", "Portfolio", "Notifications"];
 const settings = ["Logout"];
@@ -16,6 +17,8 @@ const settings = ["Logout"];
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const paths = ["/home", "/portfolio", "/notifications"];
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -40,7 +43,7 @@ function Header() {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/home"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -83,8 +86,13 @@ function Header() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+              {pages.map((page, index) => (
+                <MenuItem
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  component={Link}
+                  to={{ pathname: paths[index] }}
+                >
                   <Typography
                     textAlign="center"
                     sx={{ fontFamily: "Apple Color Emoji" }}
@@ -110,7 +118,7 @@ function Header() {
             ARTION
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {pages.map((page, index) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -121,6 +129,8 @@ function Header() {
                   fontFamily: "Apple Color Emoji",
                   fontWeight: 200,
                 }}
+                component={Link}
+                to={{ pathname: paths[index] }}
               >
                 {page}
               </Button>
