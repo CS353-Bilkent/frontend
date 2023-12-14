@@ -1,9 +1,8 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./LoginPage";
-import SignUp from "./SignUp";
-import ForgotPassword from "./ForgotPassword";
+import LoginPage from "./pages/LoginPage";
+import SignUp from "./pages/SignUp";
 import UploadArtwork from "./pages/UploadArtwork";
 import Home from "./pages/Home";
 import Workshops from "./pages/Workshops";
@@ -18,7 +17,6 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/upload-artwork" element={<UploadArtwork />} />
           <Route path="/home" element={<Home />} />
           <Route path="/workshops" element={<Workshops />} />

@@ -8,10 +8,21 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import Header from "../components/Header";
+import {
+  ARTWORK_MATERIAL,
+  ARTWORK_MEDIUM,
+  ARTWORK_MOVEMENT,
+  ARTWORK_RARITY,
+  ARTWORK_TYPE,
+} from "../utility/artworkDetailMap";
+import axiosInstance from "../service/axiosInterceptor";
+import { useNavigate } from "react-router-dom";
 
 export default function UploadArtwork() {
   const [file, setFile] = useState();
   const [image, setImage] = useState();
+
+  const navigate = useNavigate();
 
   function handleChange(e) {
     console.log(e.target.files);
@@ -19,22 +30,76 @@ export default function UploadArtwork() {
     setImage(e.target.files[0]);
   }
 
-  const handleImageUpload = (event) => {
-    const formData = new FormData();
-    formData.append("Image", image);
+  const handleUpload = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
 
-    fetch("https://httpbin.org/post", {
-      method: "POST",
-      body: formData,
-    }).catch((error) => {
-      console.error(error);
+    console.log({
+      image: image,
+      name: data.get("artwork-title"),
+      userId: "1234",
+      artistId: "1234",
+      fixedPrice: data.get("reserve-price"),
+      artworkTypeId: ARTWORK_TYPE[data.get("artwork-type")],
+      timePeriod: "1234",
+      rarityId: ARTWORK_RARITY[data.get("rarity")],
+      mediumId: ARTWORK_MEDIUM[data.get("medium")],
+      sizeX: data.get("size-x"),
+      sizeY: data.get("size-y"),
+      sizeZ: data.get("size-z"),
+      materialId: ARTWORK_MATERIAL[data.get("material")],
+      artworkLocation: "Istanbul",
+      artMovementId: ARTWORK_MOVEMENT[data.get("movement")],
+      acquisitionWay: "1234",
+      artworkDescription: data.get("description"),
     });
+
+    try {
+      console.log("handleupload");
+      const res = await axiosInstance.post(
+        "/art/upload",
+        {
+          image: image,
+          name: data.get("artwork-title"),
+          userId: "1234",
+          artistId: "1234",
+          fixedPrice: data.get("reserve-price"),
+          artworkTypeId: ARTWORK_TYPE[data.get("artwork-type")],
+          timePeriod: "1234",
+          rarityId: ARTWORK_RARITY[data.get("rarity")],
+          mediumId: ARTWORK_MEDIUM[data.get("medium")],
+          sizeX: data.get("size-x"),
+          sizeY: data.get("size-y"),
+          sizeZ: data.get("size-z"),
+          materialId: ARTWORK_MEDIUM[data.get("material")],
+          artworkLocation: "Istanbul",
+          artMovementId: ARTWORK_MOVEMENT[data.get("movement")],
+          acquisitionWay: "1234",
+          artworkDescription: data.get("description"),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("res", res);
+      navigate("/home");
+    } catch (err) {
+      console.log("err", err);
+      throw new Error("Cannot upload!");
+    }
   };
+
   return (
     <>
       <Header />
       <Grid
         container
+        component="form"
+        onSubmit={handleUpload}
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -80,14 +145,16 @@ export default function UploadArtwork() {
             }}
           >
             <TextField
-              id="outlined-basic"
+              id="artwork-title"
+              name="artwork-title"
               label="Artwork Title"
               variant="outlined"
               sx={{ width: "30%" }}
               placeholder="Enter your artwork title here"
             />
             <TextField
-              id="outlined-multiline-static"
+              id="description"
+              name="description"
               label="Description"
               multiline
               rows={4}
@@ -106,35 +173,40 @@ export default function UploadArtwork() {
             >
               Details:
               <TextField
-                id="outlined-basic"
+                id="artwork-type"
+                name="artwork-type"
                 label="Artwork Type"
                 variant="outlined"
                 sx={{ width: "20%" }}
                 placeholder="Enter artwork type"
               />
               <TextField
-                id="outlined-basic"
+                id="rarity"
+                name="rarity"
                 label="Rarity"
                 variant="outlined"
                 sx={{ width: "20%" }}
                 placeholder="Enter rarity"
               />
               <TextField
-                id="outlined-basic"
+                id="medium"
+                name="medium"
                 label="Medium"
                 variant="outlined"
                 sx={{ width: "20%" }}
                 placeholder="Enter medium"
               />
               <TextField
-                id="outlined-basic"
+                id="movement"
+                name="movement"
                 label="Movement"
                 variant="outlined"
                 sx={{ width: "20%" }}
                 placeholder="Enter movement"
               />
               <TextField
-                id="outlined-basic"
+                id="material"
+                name="material"
                 label="Material"
                 variant="outlined"
                 sx={{ width: "20%" }}
@@ -151,21 +223,24 @@ export default function UploadArtwork() {
             >
               Sizes:
               <TextField
-                id="outlined-basic"
+                id="size-x"
+                name="size-x"
                 label="Size (X)"
                 variant="outlined"
                 sx={{ width: "15%" }}
                 placeholder="Enter material"
               />
               <TextField
-                id="outlined-basic"
+                id="size-y"
+                name="size-y"
                 label="Size (Y)"
                 variant="outlined"
                 sx={{ width: "15%" }}
                 placeholder="Enter material"
               />
               <TextField
-                id="outlined-basic"
+                id="size-z"
+                name="size-z"
                 label="Size (Z)"
                 variant="outlined"
                 sx={{ width: "15%" }}
@@ -182,7 +257,8 @@ export default function UploadArtwork() {
             >
               <Typography>Reserved Price: </Typography>
               <TextField
-                id="outlined-basic"
+                id="reserve-price"
+                name="reserve-price"
                 label="Reserve Price"
                 variant="outlined"
                 sx={{ width: "20%" }}
@@ -199,21 +275,24 @@ export default function UploadArtwork() {
                 }}
               >
                 <TextField
-                  id="outlined-basic"
+                  id="initial-bid"
+                  name="initial-bid"
                   label="Initial Bid"
                   variant="outlined"
                   sx={{ width: "20%" }}
                   placeholder="Set initial bid"
                 />
                 <TextField
-                  id="outlined-basic"
+                  id="start-date"
+                  name="start-date"
                   label="Auction Start Date"
                   variant="outlined"
                   sx={{ width: "30%" }}
                   placeholder="Set Start Date"
                 />
                 <TextField
-                  id="outlined-basic"
+                  id="end-date"
+                  name="end-date"
                   label="Auction End Date"
                   variant="outlined"
                   sx={{ width: "30%" }}
@@ -230,13 +309,13 @@ export default function UploadArtwork() {
                 gap: "15px",
               }}
             >
-              <img src={file} width={"100"} />
+              <img src={file} alt="uploaded" width={"100"} />
               <input type="file" onChange={handleChange} />
             </Grid>
             <Button
               variant="contained"
               sx={{ width: "40%", backgroundColor: "#246d82" }}
-              onClick={handleImageUpload}
+              type="submit"
             >
               Upload
             </Button>

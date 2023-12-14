@@ -1,26 +1,21 @@
-import React, { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
+import React, { useState } from "react";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import axiosInstance from "../service/axiosInterceptor";
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formErrors, setFormErrors] = useState({
@@ -28,7 +23,6 @@ function SignUp() {
     password: false,
     confirmPassword: false,
   });
-  const [userType, setUserType] = useState('');
 
   const handleToggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -38,32 +32,38 @@ function SignUp() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleUserTypeChange = (event) => {
-    setUserType(event.target.value);
-  };
-
   const validateForm = (data) => {
     const errors = {
-      email: !data.get('email'),
-      password: !data.get('password'),
-      confirmPassword: data.get('password') !== data.get('confirmPassword'),
-      userType: !userType,
+      email: !data.get("email"),
+      password: !data.get("password"),
+      confirmPassword: data.get("password") !== data.get("confirmPassword"),
     };
     setFormErrors(errors);
-    return !errors.userType && !errors.email && !errors.password && !errors.confirmPassword;
+    return !errors.email && !errors.password && !errors.confirmPassword;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     if (!validateForm(data)) return;
     console.log({
-      userType,
-      email: data.get('email'),
-      password: data.get('password'),
-      // You can add additional fields here as needed
+      username: data.get("username"),
+      email: data.get("email"),
+      password: data.get("password"),
     });
-    // Implement your registration logic here
+
+    try {
+      const res = await axiosInstance.post("/auth/register", {
+        username: data.get("username"),
+        email: data.get("email"),
+        password: data.get("password"),
+      });
+      navigate("/login");
+      console.log("res", res);
+    } catch (err) {
+      console.log("err", err);
+      throw new Error("Cannot register!");
+    }
   };
 
   return (
@@ -72,33 +72,42 @@ function SignUp() {
       <Box
         sx={{
           marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign Up
+        <Typography
+          variant="h6"
+          noWrap
+          component="a"
+          sx={{
+            mr: 2,
+            fontSize: "48px",
+            display: { xs: "none", md: "flex" },
+            fontFamily: "Apple Color Emoji",
+            fontWeight: 200,
+            letterSpacing: ".5rem",
+            color: "inherit",
+            textDecoration: "none",
+          }}
+        >
+          ARTION
+        </Typography>
+        <Typography
+          sx={{
+            mr: 2,
+            fontSize: "24px",
+            display: { xs: "none", md: "flex" },
+            fontFamily: "Apple Color Emoji",
+            fontWeight: 200,
+          }}
+          component="h1"
+          variant="h5"
+        >
+          Register
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="user-type-label">User Type</InputLabel>
-            <Select
-              labelId="user-type-label"
-              id="user-type"
-              value={userType}
-              label="User Type"
-              onChange={handleUserTypeChange}
-              required
-            >
-              <MenuItem value={"artist"}>Artist</MenuItem>
-              <MenuItem value={"gallery"}>Gallery</MenuItem>
-              <MenuItem value={"general"}>General User</MenuItem>
-            </Select>
-          </FormControl>
           <TextField
             margin="normal"
             required
@@ -110,6 +119,18 @@ function SignUp() {
             autoFocus
             error={formErrors.email}
             helperText={formErrors.email ? "Email is required" : ""}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+            autoFocus
+            error={formErrors.username}
+            helperText={formErrors.username ? "Username is required" : ""}
           />
           <TextField
             margin="normal"
@@ -146,7 +167,9 @@ function SignUp() {
             id="confirm-password"
             autoComplete="new-password"
             error={formErrors.confirmPassword}
-            helperText={formErrors.confirmPassword ? "Passwords do not match" : ""}
+            helperText={
+              formErrors.confirmPassword ? "Passwords do not match" : ""
+            }
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -160,10 +183,6 @@ function SignUp() {
                 </InputAdornment>
               ),
             }}
-          />
-          <FormControlLabel
-            control={<Checkbox value="allowExtraEmails" color="primary" />}
-            label="I want to receive inspiration, marketing promotions and updates via email."
           />
           <Button
             type="submit"
