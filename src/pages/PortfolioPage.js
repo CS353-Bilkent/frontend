@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axiosInstance from '../service/axiosInterceptor';
 
 // Main PortfolioPage Component
 const PortfolioPage = ({ artistId }) => {
@@ -7,10 +8,9 @@ const PortfolioPage = ({ artistId }) => {
     useEffect(() => {
         const fetchArtworks = async () => {
             try {
-                const response = await fetch(`/api/artworks?artistId=${artistId}`);
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-                setArtworks(data);
+                const response = await axiosInstance.get(`/api/artworks?artistId=${artistId}`);
+                setArtworks(response.data);
+                console.log("data", response.data);
             } catch (error) {
                 console.error('Fetch error:', error);
             }
@@ -53,10 +53,8 @@ const ArtworkModal = ({ artwork, closeModal }) => {
         const fetchBids = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`/api/bids?artworkId=${artwork.artwork_id}`);
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-                setBids(data);
+                const response = await axiosInstance.get(`/api/bids?artworkId=${artwork.artwork_id}`);
+                setBids(response.data);
             } catch (error) {
                 console.error('Fetch error:', error);
             } finally {
@@ -69,12 +67,9 @@ const ArtworkModal = ({ artwork, closeModal }) => {
 
     const handleDescriptionUpdate = async () => {
         try {
-            const response = await fetch(`/api/artworks/update/${artwork.artwork_id}`, {
-                method: 'PUT',
-                body: JSON.stringify({ description }),
-                headers: { 'Content-Type': 'application/json' }
+            await axiosInstance.put(`/api/artworks/update/${artwork.artwork_id}`, {
+                description
             });
-            if (!response.ok) throw new Error('Network response was not ok');
             closeModal();
         } catch (error) {
             console.error('Update error:', error);
@@ -83,10 +78,8 @@ const ArtworkModal = ({ artwork, closeModal }) => {
 
     const handleBidApproval = async (bidId, isApproved) => {
         try {
-            await fetch(`/api/bids/update/${bidId}`, {
-                method: 'PUT',
-                body: JSON.stringify({ approved: isApproved }),
-                headers: { 'Content-Type': 'application/json' }
+            await axiosInstance.put(`/api/bids/update/${bidId}`, {
+                approved: isApproved
             });
             // Update the bid list locally or re-fetch
         } catch (error) {
