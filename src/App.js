@@ -9,6 +9,7 @@ import Workshops from "./pages/Workshops";
 import ArtworkDetail from "./pages/ArtworkDetail";
 import NotFound from "./pages/NotFound";
 import Notifications from "./pages/Notifications";
+import PortfolioPage from "./pages/PortfolioPage";
 
 function App() {
   return (
@@ -16,12 +17,13 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/artwork-detail/:id" element={<ArtworkDetail />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/portfolio" element={<PortfolioPage />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/upload-artwork" element={<UploadArtwork />} />
-          <Route path="/home" element={<Home />} />
           <Route path="/workshops" element={<Workshops />} />
-          <Route path="/artwork-detail/:id" element={<ArtworkDetail />} />
-          <Route path="/notifications" element={<Notifications />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
