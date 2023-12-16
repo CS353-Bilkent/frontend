@@ -2,15 +2,19 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import axiosInstance from '../service/axiosInterceptor';
 import { UserContext } from '../contexts/UserContext';
+import '../styles.css';
 
 // Artwork Component
-const Artwork = ({ artwork }) => {
+const Artwork = ({ artwork, displayImage }) => {
+    console.log("Artwork prop:", artwork);
+    console.log("display Image:", displayImage);
     const [modalOpen, setModalOpen] = useState(false);
 
     return (
         <div onClick={() => setModalOpen(true)}>
-            <h3>{artwork.title}</h3>
-            <p>{artwork.description}</p>
+            <h3>{artwork.artworkName}</h3>
+            <p>{artwork.artworkDescription}</p>
+            <img src={`data:image/jpeg;base64,${displayImage}`} alt={artwork.artworkName} />
             {modalOpen && (
                 <ArtworkModal artwork={artwork} closeModal={() => setModalOpen(false)} />
             )}
@@ -20,11 +24,12 @@ const Artwork = ({ artwork }) => {
 
 Artwork.propTypes = {
     artwork: PropTypes.object.isRequired,
+    displayImage: PropTypes.string.isRequired,
 };
 
 // ArtworkModal Component
-const ArtworkModal = ({ artwork, closeModal }) => {
-    const [description, setDescription] = useState(artwork.description);
+const ArtworkModal = ({ artwork, displayImage, closeModal }) => {
+    const [description, setDescription] = useState(artwork.artworkDescription);
     const [bids, setBids] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -74,6 +79,7 @@ const ArtworkModal = ({ artwork, closeModal }) => {
     return (
         <div>
             <h2>Edit Artwork</h2>
+            <img src={displayImage} alt={artwork.artworkName} />
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
             <button onClick={handleDescriptionUpdate}>Save Changes</button>
             <button onClick={closeModal}>Cancel</button>
@@ -94,6 +100,7 @@ const ArtworkModal = ({ artwork, closeModal }) => {
 
 ArtworkModal.propTypes = {
     artwork: PropTypes.object.isRequired,
+    displayImage: PropTypes.string.isRequired,
     closeModal: PropTypes.func.isRequired,
 };
 
@@ -110,16 +117,15 @@ const PortfolioPage = () => {
             return;
         }
 
-        if (!user.artistId) {
-            console.log('No artistId available in user context');
-            return;
-        }
-
         const fetchArtworks = async () => {
             try {
-                const response = await axiosInstance.get(`/art?artistId=${user.artistId}`);
-                setArtworks(response.data);
-                console.log("Fetched artworks data:", response.data);
+                const response = await axiosInstance.get('/art/my');
+                console.log("API Response:", response.data); // Bu satır eklendi
+                if (Array.isArray(response.data.data)) {
+                    setArtworks(response.data.data);
+                } else {
+                    console.error('Expected an array of artworks, but got:', response.data);
+                }
             } catch (error) {
                 console.error('Fetch error:', error);
             }
@@ -129,9 +135,9 @@ const PortfolioPage = () => {
     }, [user]);
 
     return (
-        <div>
-            {artworks.map(artwork => (
-                <Artwork key={artwork.artwork_id} artwork={artwork} />
+        <div className="artwork-container">
+            {Array.isArray(artworks) && artworks.map((artworkData, index) => (
+                <Artwork key={index} artwork={artworkData.artwork} displayImage={artworkData.displayImage} />
             ))}
         </div>
     );
