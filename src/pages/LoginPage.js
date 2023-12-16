@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -15,11 +15,15 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import axiosInstance, { setAuthToken } from "../service/axiosInterceptor";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from '../contexts/UserContext'; 
+
 function SignIn() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+
+  const { setUser } = useContext(UserContext);
 
   const handleToggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -58,6 +62,10 @@ function SignIn() {
 
       localStorage.setItem("accessToken", accessToken);
       setAuthToken(accessToken);
+      const userId = res.data?.data?.user_id;
+      if (!userId) throw new Error("userId is not available.");
+      const userData = { artistId: userId };
+      setUser(userData);
       navigate("/home");
     } catch (err) {
       console.log("err", err);
