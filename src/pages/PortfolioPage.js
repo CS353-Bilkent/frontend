@@ -49,19 +49,19 @@ const ArtworkModal = ({ artwork, closeModal }) => {
     const [bids, setBids] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        const fetchBids = async () => {
-            setIsLoading(true);
-            try {
-                const response = await axiosInstance.get(`/api/bids?artworkId=${artwork.artwork_id}`);
-                setBids(response.data);
-            } catch (error) {
-                console.error('Fetch error:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    const fetchBids = async () => {
+        setIsLoading(true);
+        try {
+            const response = await axiosInstance.get(`/api/bids?artworkId=${artwork.artwork_id}`);
+            setBids(response.data);
+        } catch (error) {
+            console.error('Fetch error:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchBids();
     }, [artwork.artwork_id]);
 
@@ -78,10 +78,8 @@ const ArtworkModal = ({ artwork, closeModal }) => {
 
     const handleBidApproval = async (bidId, isApproved) => {
         try {
-            await axiosInstance.put(`/api/bids/update/${bidId}`, {
-                approved: isApproved
-            });
-            // Update the bid list locally or re-fetch
+            await axiosInstance.put(`/api/bids/update/${bidId}`, { approved: isApproved });
+            fetchBids();
         } catch (error) {
             console.error('Bid update error:', error);
         }
