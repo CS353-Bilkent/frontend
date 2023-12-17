@@ -88,10 +88,13 @@ export default function Portfolio() {
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h2">
-                    {artwork.artworkName}
+                    {artwork.artworkDto.artworkName}
                   </Typography>
                   <Typography variant="body2" color="textSecondary" component="p">
-                    {artwork.artistName}
+                    {artwork.artworkDto.artworkDescription}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" component="p">
+                    {artwork.artworkDto.artistName}
                   </Typography>
                 </CardContent>
               </CardActionArea>
