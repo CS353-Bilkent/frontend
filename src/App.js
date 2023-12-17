@@ -9,7 +9,7 @@ import Workshops from "./pages/Workshops";
 import ArtworkDetail from "./pages/ArtworkDetail";
 import NotFound from "./pages/NotFound";
 import Notifications from "./pages/Notifications";
-import PortfolioPage from "./pages/PortfolioPage";
+import Portfolio from "./pages/Portfolio";
 import { UserProvider } from "./contexts/UserContext";
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
             <Route path="/artwork-detail/:id" element={<ArtworkDetail />} />
             <Route path="/home" element={<Home />} />
             <Route path="/notifications" element={<Notifications />} />
-            <Route path="/portfolio" element={<PortfolioPage />} />
+            <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/upload-artwork" element={<UploadArtwork />} />
             <Route path="/workshops" element={<Workshops />} />
