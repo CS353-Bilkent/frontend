@@ -75,6 +75,16 @@ export default function Portfolio() {
   return (
     <>
       <Header />
+      <Typography
+        sx={{
+          fontFamily: "Segoe UI",
+          fontWeight: 200,
+          fontSize: 36,
+          marginTop: "2vh",
+        }}
+      >
+        My Portfolio
+      </Typography>
       <Grid container spacing={4} style={{ padding: 24 }}>
         {artworks.map((artwork, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
