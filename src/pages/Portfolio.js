@@ -29,18 +29,22 @@ export default function Portfolio() {
   const [newDescription, setNewDescription] = useState("");
 
   useEffect(() => {
-    // Fetch artworks using axiosInstance
     axiosInstance.get("/art/my")
       .then(response => setArtworks(response.data.data))
       .catch(error => console.error('Error:', error));
   }, []);
 
+  useEffect(() => {
+    console.log("Selected Artwork Updated: ", selectedArtwork);
+  }, [selectedArtwork]);
+
   const handleOpenDialog = (artwork, mode) => {
-    setSelectedArtwork(artwork);
+    const artworkWithId = { ...artwork.artworkDto, displayImage: artwork.displayImage };
+    setSelectedArtwork(artworkWithId);
     setDialogMode(mode);
     setOpenDialog(true);
     if (mode === "bids") {
-      fetchBids(artwork.artworkId);
+      fetchBids(artworkWithId.artworkId);
     }
   };
 
@@ -63,7 +67,7 @@ export default function Portfolio() {
     const apiEndpoint = approve ? `/payments/approve/${bidId}` : `/payments/reject/${bidId}`;
     axiosInstance.put(apiEndpoint)
       .then(response => {
-        fetchBids(selectedArtwork.artworkId); // Refresh bids
+        fetchBids(selectedArtwork.artworkId);
       })
       .catch(error => console.error('Error:', error));
   };
