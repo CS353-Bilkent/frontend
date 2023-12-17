@@ -61,10 +61,10 @@ export default function Portfolio() {
         // Optionally, refresh artworks or update state
       })
       .catch(error => console.error('Error:', error));
-  };
+  };  
 
   const handleApproveRejectBid = (bidId, approve) => {
-    const apiEndpoint = approve ? `/payments/approve/${bidId}` : `/payments/reject/${bidId}`;
+    const apiEndpoint = approve ? `/bid/approve/${bidId}` : `/bid/reject/${bidId}`;
     axiosInstance.put(apiEndpoint)
       .then(response => {
         fetchBids(selectedArtwork.artworkId);
