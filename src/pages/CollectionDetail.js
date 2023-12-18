@@ -3,7 +3,6 @@ import {
   Typography,
   Card,
   CardActionArea,
-  CardContent,
   CardMedia,
 } from "@mui/material";
 import Header from "../components/Header";
