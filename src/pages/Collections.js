@@ -11,41 +11,22 @@ import Header from "../components/Header";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 
-export default function Workshops() {
-  let artworks = [
+export default function Collections() {
+  let collections = [
     {
-      title: "What is Art?",
-      artist: "Rene Magritte",
-      description:
-        "This is a workshop that will teach you about the different types of art and how to appreciate them.",
+      title: "Collection #1",
       image: "/artworks/rene-magritte.webp",
     },
     {
-      title: "What is Art?",
-      artist: "Rene Magritte",
-      description:
-        "This is a workshop that will teach you about the different types of art and how to appreciate them.",
+      title: "Collection #1",
       image: "/artworks/rene-magritte.webp",
     },
     {
-      title: "What is Art?",
-      artist: "Rene Magritte",
-      description:
-        "This is a workshop that will teach you about the different types of art and how to appreciate them.",
+      title: "Collection #1",
       image: "/artworks/rene-magritte.webp",
     },
     {
-      title: "What is Art?",
-      artist: "Rene Magritte",
-      description:
-        "This is a workshop that will teach you about the different types of art and how to appreciate them.",
-      image: "/artworks/rene-magritte.webp",
-    },
-    {
-      title: "What is Art?",
-      artist: "Rene Magritte",
-      description:
-        "This is a workshop that will teach you about the different types of art and how to appreciate them.",
+      title: "Collection #1",
       image: "/artworks/rene-magritte.webp",
     },
   ];
@@ -84,7 +65,7 @@ export default function Workshops() {
               marginTop: "2vh",
             }}
           >
-            Workshops
+            Collections
           </Typography>
           <Grid>
             <InputBase
@@ -96,8 +77,8 @@ export default function Workshops() {
                 borderRadius: "5px",
                 width: "50vw",
               }}
-              placeholder="Search Workshops"
-              inputProps={{ "aria-label": "Search artworks" }}
+              placeholder="Search Collections"
+              inputProps={{ "aria-label": "Search collections" }}
             />
             <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
               <SearchIcon />
@@ -116,14 +97,14 @@ export default function Workshops() {
             width: "100vw",
           }}
         >
-          {artworks.map((artwork) => (
+          {collections.map((collection) => (
             <Grid item>
               <Card sx={{ maxWidth: 400, width: 300 }}>
                 <CardActionArea>
                   <CardMedia
                     component="img"
                     height="200"
-                    image={artwork.image}
+                    image={collection.image}
                     alt="artwork"
                   />
                   <CardContent
@@ -143,10 +124,7 @@ export default function Workshops() {
                       fontFamily={"Segoe UI"}
                       component="div"
                     >
-                      {artwork.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {artwork.artist}
+                      {collection.title}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

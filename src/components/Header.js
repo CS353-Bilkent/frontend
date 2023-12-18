@@ -11,14 +11,26 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 
-const pages = ["Home", "Portfolio", "Notifications"];
+const pages = [
+  "Home",
+  "Portfolio",
+  "Notifications",
+  "Workshops",
+  "Collections",
+];
 const settings = ["Logout"];
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const paths = ["/home", "/portfolio", "/notifications"];
+  const paths = [
+    "/home",
+    "/portfolio",
+    "/notifications",
+    "/workshops",
+    "/collections",
+  ];
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
