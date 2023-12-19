@@ -11,155 +11,26 @@ import Header from "../components/Header";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axiosInstance from "../service/axiosInterceptor";
 
 export default function Home() {
   const navigate = useNavigate();
-  let artworks = [
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-    {
-      id: 1,
-      title: "Wheat Field with Cypresses",
-      title_path: "wheat-field-with-cypresses",
-      artist: "Vincent Van Gogh",
-      description:
-        "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-      image: "/artworks/wheat_fields.jpeg",
-    },
-  ];
+  const [artworks, setArtworks] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get(`/art/all`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((response) => {
+        setArtworks(response.data.data.artworkDtos);
+        console.log("artworks", response.data.data.artworkDtos);
+      })
+      .catch((error) => console.error("Error:", error));
+  }, []);
 
   return (
     <>
@@ -229,6 +100,7 @@ export default function Home() {
         >
           {artworks.map((artwork) => (
             <Grid
+              key={artwork.artworkDto.artworkId}
               item
               onClick={() => navigate(`/artwork-detail/${artwork.id}`)}
             >
@@ -237,7 +109,7 @@ export default function Home() {
                   <CardMedia
                     component="img"
                     height="200"
-                    image={artwork.image}
+                    image={`data:image/jpeg;base64,${artwork.displayImage}`}
                     alt="artwork"
                   />
                   <CardContent
@@ -257,10 +129,10 @@ export default function Home() {
                       fontFamily={"Segoe UI"}
                       component="div"
                     >
-                      {artwork.title}
+                      {artwork.artworkDto.artworkName}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {artwork.artist}
+                      {artwork.artworkDto.artistName}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

@@ -10,26 +10,37 @@ import {
 import Header from "../components/Header";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
+import axiosInstance from "../service/axiosInterceptor";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Collections() {
-  let collections = [
-    {
-      title: "Collection #1",
-      image: "/artworks/rene-magritte.webp",
-    },
-    {
-      title: "Collection #1",
-      image: "/artworks/rene-magritte.webp",
-    },
-    {
-      title: "Collection #1",
-      image: "/artworks/rene-magritte.webp",
-    },
-    {
-      title: "Collection #1",
-      image: "/artworks/rene-magritte.webp",
-    },
-  ];
+  const [collections, setCollections] = useState([]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    axiosInstance
+      .get("/collection/all", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((response) => {
+        if (
+          response.data.data.collections &&
+          response.data.data.collections[0] &&
+          response.data.data.collections[0].artworkDtos &&
+          response.data.data.collections[0].artworkDtos[0]
+        ) {
+          setCollections(response.data.data.collections);
+          console.log("collections", collections);
+          console.log(
+            "response.data.data.collections",
+            response.data.data.collections
+          );
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+  }, [collections]);
 
   return (
     <>
@@ -98,13 +109,21 @@ export default function Collections() {
           }}
         >
           {collections.map((collection) => (
-            <Grid item>
+            <Grid
+              key={collection.collection.collectionId}
+              item
+              onClick={() =>
+                navigate(
+                  `/collection-detail/${collection.collection.collectionId}`
+                )
+              }
+            >
               <Card sx={{ maxWidth: 400, width: 300 }}>
                 <CardActionArea>
                   <CardMedia
                     component="img"
                     height="200"
-                    image={collection.image}
+                    image={`data:image/jpeg;base64,${collection.artworkDtos[0].displayImage}`}
                     alt="artwork"
                   />
                   <CardContent
@@ -124,7 +143,7 @@ export default function Collections() {
                       fontFamily={"Segoe UI"}
                       component="div"
                     >
-                      {collection.title}
+                      {collection.collection.collectionName}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

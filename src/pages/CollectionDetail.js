@@ -4,21 +4,34 @@ import {
   Card,
   CardActionArea,
   CardMedia,
+  CardContent,
 } from "@mui/material";
 import Header from "../components/Header";
+import { useEffect, useState } from "react";
+import axiosInstance from "../service/axiosInterceptor";
 
-export default function ArtworkDetail({ collectionName, collectionImages }) {
-  const collection = {
-    title: "Collection #1",
-  };
-  const collection_images = [
-    "/artworks/rene-magritte.webp",
-    "/artworks/rene-magritte.webp",
-    "/artworks/rene-magritte.webp",
-    "/artworks/rene-magritte.webp",
-    "/artworks/rene-magritte.webp",
-    "/artworks/rene-magritte.webp",
-  ];
+export default function CollectionDetail() {
+  const [collection, setCollection] = useState([]);
+  const [collectionTitle, setCollectionTitle] = useState("");
+  const collectionId =
+    window.location.pathname.split("/").length >= 3
+      ? window.location.pathname.split("/")[2]
+      : null;
+
+  useEffect(() => {
+    axiosInstance
+      .get(`/collection/${collectionId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((response) => {
+        setCollection(response.data.data);
+        setCollectionTitle(response.data.data.collection.collectionName);
+      })
+      .catch((error) => console.error("Error:", error));
+  }, [collectionId]);
+
   return (
     <>
       <Header />
@@ -53,7 +66,7 @@ export default function ArtworkDetail({ collectionName, collectionImages }) {
               marginTop: "2vh",
             }}
           >
-            {collection.title}
+            {collectionTitle || "Collection Loading..."}
           </Typography>
         </Grid>
 
@@ -68,16 +81,39 @@ export default function ArtworkDetail({ collectionName, collectionImages }) {
             width: "100vw",
           }}
         >
-          {collection_images.map((collectionImage) => (
+          {(collection.artworkDtos || []).map((col) => (
             <Grid item>
               <Card sx={{ maxWidth: 400, width: 300 }}>
                 <CardActionArea>
                   <CardMedia
                     component="img"
                     height="400"
-                    image={collectionImage}
+                    image={`data:image/jpeg;base64,${col.displayImage}`}
                     alt="artwork"
                   />
+                  <CardContent
+                    sx={{
+                      height: "35px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      backdropFilter: "blur(10px)",
+                    }}
+                  >
+                    <Typography
+                      gutterBottom
+                      fontSize={"24"}
+                      fontWeight={700}
+                      fontFamily={"Segoe UI"}
+                      component="div"
+                    >
+                      {col.artworkDto.artworkName}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {col.artworkDto.artistName}
+                    </Typography>
+                  </CardContent>
                 </CardActionArea>
               </Card>
             </Grid>
