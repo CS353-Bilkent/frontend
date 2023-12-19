@@ -1,22 +1,35 @@
 import { Grid, Typography, Paper, TextField, Button } from "@mui/material";
 import Header from "../components/Header";
+import { useEffect, useState } from "react";
+import axiosInstance from "../service/axiosInterceptor";
 
-export default function ArtworkDetail({
-  imageName,
-  imagePath,
-  imageDescription,
-  imageArtist,
-  imagePrice,
-  imageCategory,
-}) {
-  const artwork = {
-    title: "Wheat Field with Cypresses",
-    title_path: "wheat-field-with-cypresses",
-    artist: "Vincent Van Gogh",
-    description:
-      "Cypresses gained ground in Van Gogh’s work by late June 1889 when he resolved to devote one of his first series in Saint-Rémy to the towering trees. Distinctive for their rich impasto, his exuberant on-the-spot studies include the Met’s close-up vertical view of cypresses (49.30) and this majestic horizontal composition, which he illustrated in reed-pen drawings sent to his brother on July 2. Van Gogh regarded the present work as one of his “best” summer landscapes and was prompted that September to make two studio renditions: one on the same scale (National Gallery, London) and the other a smaller replica, intended as a gift for his mother and sister (private collection).",
-    image: "/artworks/wheat_fields.jpeg",
-  };
+export default function ArtworkDetail() {
+  const [artwork, setArtwork] = useState([]);
+  const [artworkTitle, setArtworkTitle] = useState("");
+  const [artworkArtist, setArtworkArtist] = useState("");
+  const [artworkDesc, setArtworkDesc] = useState("");
+  const artworkId =
+    window.location.pathname.split("/").length >= 3
+      ? window.location.pathname.split("/")[2]
+      : null;
+
+  useEffect(() => {
+    axiosInstance
+      .get(`/art/details/${artworkId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((response) => {
+        setArtwork(response.data.data);
+        setArtworkTitle(response.data.data.artworkDto.artworkName);
+        setArtworkArtist(response.data.data.artworkDto.artistName);
+        setArtworkDesc(response.data.data.artworkDto.artworkDescription);
+        console.log("artwork", response.data.data);
+      })
+      .catch((error) => console.error("Error:", error));
+  }, [artworkId]);
+
   return (
     <>
       <Header />
@@ -45,7 +58,11 @@ export default function ArtworkDetail({
             height: "70%",
           }}
         >
-          <img width={"100%"} src={artwork.image} alt={imageName} />
+          <img
+            width={"100%"}
+            src={`data:image/jpeg;base64,${artwork.displayImage}`}
+            alt={"ojkeg"}
+          />
         </Grid>
         <Grid
           sx={{
@@ -63,10 +80,10 @@ export default function ArtworkDetail({
           <Typography
             sx={{ fontFamily: "Segou UI", fontSize: "42px", fontWeight: "600" }}
           >
-            {artwork.title}
+            {artworkTitle || "Artwork Loading..."}
           </Typography>
           <Typography sx={{ fontFamily: "Segou UI", fontSize: "32px" }}>
-            {artwork.artist}
+            {artworkArtist || "Artist Loading..."}
           </Typography>
           <Typography
             sx={{
@@ -76,7 +93,7 @@ export default function ArtworkDetail({
               textAlign: "start",
             }}
           >
-            {artwork.description}
+            {artworkDesc || "Description Loading..."}
           </Typography>
           <Grid
             sx={{

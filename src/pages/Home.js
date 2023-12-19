@@ -102,7 +102,9 @@ export default function Home() {
             <Grid
               key={artwork.artworkDto.artworkId}
               item
-              onClick={() => navigate(`/artwork-detail/${artwork.id}`)}
+              onClick={() =>
+                navigate(`/artwork-detail/${artwork.artworkDto.artworkId}`)
+              }
             >
               <Card sx={{ maxWidth: 400, width: 300 }}>
                 <CardActionArea>

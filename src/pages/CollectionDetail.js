@@ -82,7 +82,7 @@ export default function CollectionDetail() {
           }}
         >
           {(collection.artworkDtos || []).map((col) => (
-            <Grid item>
+            <Grid item key={col.artworkDto.artworkId}>
               <Card sx={{ maxWidth: 400, width: 300 }}>
                 <CardActionArea>
                   <CardMedia
