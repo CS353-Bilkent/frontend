@@ -105,7 +105,8 @@ export default function ArtworkDetail() {
           }}
         >
           <img
-            width={"100%"}
+            width={"90%"}
+            height={"90%"}
             src={`data:image/jpeg;base64,${artwork.displayImage}`}
             alt={"ojkeg"}
           />

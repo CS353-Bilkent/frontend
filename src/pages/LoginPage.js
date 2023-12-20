@@ -15,7 +15,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import axiosInstance, { setAuthToken } from "../service/axiosInterceptor";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from '../contexts/UserContext'; 
+import { UserContext } from "../contexts/UserContext";
 
 function SignIn() {
   const navigate = useNavigate();
@@ -152,10 +152,6 @@ function SignIn() {
               ),
             }}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
           <Button
             type="submit"
             fullWidth
@@ -165,11 +161,6 @@ function SignIn() {
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="/forgot-password" variant="body2">
-                Forgot Password?
-              </Link>
-            </Grid>
             <Grid item>
               <Link href="/sign-up" variant="body2">
                 {"Don't have an account? Sign Up"}

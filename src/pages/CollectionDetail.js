@@ -9,8 +9,10 @@ import {
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import axiosInstance from "../service/axiosInterceptor";
+import { useNavigate } from "react-router-dom";
 
 export default function CollectionDetail() {
+  const navigate = useNavigate();
   const [collection, setCollection] = useState([]);
   const [collectionTitle, setCollectionTitle] = useState("");
   const collectionId =
@@ -82,7 +84,13 @@ export default function CollectionDetail() {
           }}
         >
           {(collection.artworkDtos || []).map((col) => (
-            <Grid item key={col.artworkDto.artworkId}>
+            <Grid
+              item
+              key={col.artworkDto.artworkId}
+              onClick={() =>
+                navigate(`/artwork-detail/${col.artworkDto.artworkId}`)
+              }
+            >
               <Card sx={{ maxWidth: 400, width: 300 }}>
                 <CardActionArea>
                   <CardMedia
