@@ -1,5 +1,12 @@
 import { Grid, Typography, Paper, TextField, Button } from "@mui/material";
 import Header from "../components/Header";
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import { useEffect, useState } from "react";
 import axiosInstance from "../service/axiosInterceptor";
 
@@ -12,6 +19,45 @@ export default function ArtworkDetail() {
     window.location.pathname.split("/").length >= 3
       ? window.location.pathname.split("/")[2]
       : null;
+  const [collections, setCollections] = useState([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  useEffect(() => {
+    const userId = 3; // TODO:
+    axiosInstance.get(`/collection/creator/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
+    .then(response => {
+      setCollections(response.data.data.collections);
+    })
+    .catch(error => console.error('Error:', error));
+  }, []);
+
+  const handleAddToCollection = (collectionId) => {
+    axiosInstance.put(`/collection/${collectionId}`, {
+      artworks: [artworkId]
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
+    .then(response => {
+      setIsDialogOpen(false);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  };
+
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
 
   useEffect(() => {
     axiosInstance
@@ -77,6 +123,28 @@ export default function ArtworkDetail() {
           }}
           component={Paper}
         >
+          <Button variant="contained" onClick={handleOpenDialog}>
+        Add to Collection
+      </Button>
+      <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Add Artwork to Collection</DialogTitle>
+        <DialogContent>
+          <List>
+            {collections.map(collection => (
+              <ListItem 
+                button 
+                key={collection.artGalleryId} 
+                onClick={() => handleAddToCollection(collection.artGalleryId)}
+              >
+                <ListItemText primary={collection.artGalleryName} />
+              </ListItem>
+            ))}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
           <Typography
             sx={{ fontFamily: "Segou UI", fontSize: "42px", fontWeight: "600" }}
           >
