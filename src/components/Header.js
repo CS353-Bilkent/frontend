@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import BeAnArtistDialog from './BeAnArtistDialog';
+import BeAGalleryOwnerDialog from "./BeAGalleryOwnerDialog";
 
 const pages = [
   "Home",
@@ -25,6 +26,7 @@ function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isArtistDialogOpen, setIsArtistDialogOpen] = useState(false);
+  const [isGalleryOwnerDialogOpen, setIsGalleryOwnerDialogOpen] = useState(false);
 
   const paths = [
     "/home",
@@ -34,12 +36,12 @@ function Header() {
     "/collections",
   ];
 
-  const handleOpenArtistDialog = () => {
-    setIsArtistDialogOpen(true);
-  };
-
   const handleCloseArtistDialog = () => {
     setIsArtistDialogOpen(false);
+  };
+
+  const handleCloseGalleryOwnerDialog = () => {
+    setIsGalleryOwnerDialogOpen(false);
   };
 
   const handleOpenNavMenu = (event) => {
@@ -190,19 +192,7 @@ function Header() {
           </Box>
           <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', marginLeft: 'auto', marginBottom: '10px' }}>
             <BeAnArtistDialog open={isArtistDialogOpen} onClose={handleCloseArtistDialog} />
-            <Button
-              variant="contained"
-              size="small"
-              sx={{
-                backgroundColor: "#9c27b0",
-                color: "white",
-                borderRadius: 1,
-              }}
-              component={Link}
-              to="/be-a-gallery-owner"
-            >
-              Be a Gallery Owner
-            </Button>
+            <BeAGalleryOwnerDialog open={isArtistDialogOpen} onClose={handleCloseGalleryOwnerDialog} />
           </Box>
         </Toolbar>
       </Container>
