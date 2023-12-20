@@ -34,7 +34,7 @@ export default function Portfolio() {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     })
-      .then(response => setArtworks(response.data.data))
+      .then(response => setArtworks(response.data.data.artworkDtos))
       .catch(error => console.error('Error:', error));
   }, []);
 
@@ -53,13 +53,21 @@ export default function Portfolio() {
   };
 
   const fetchBids = (artworkId) => {
-    axiosInstance.get(`/bid/artwork/${artworkId}/bids`)
+    axiosInstance.get(`/bid/artwork/${artworkId}/bids`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
       .then(response => setBids(response.data))
       .catch(error => console.error('Error:', error));
   };
 
   const handleUpdateDescription = () => {
-    axiosInstance.put(`/art/${selectedArtwork.artworkId}`, { newDescription })
+    axiosInstance.put(`/art/${selectedArtwork.artworkId}`, { newDescription }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
       .then(response => {
         setOpenDialog(false);
         // Optionally, refresh artworks or update state
@@ -69,7 +77,11 @@ export default function Portfolio() {
 
   const handleApproveRejectBid = (bidId, approve) => {
     const apiEndpoint = approve ? `/bid/approve/${bidId}` : `/bid/reject/${bidId}`;
-    axiosInstance.put(apiEndpoint)
+    axiosInstance.put(apiEndpoint, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
       .then(response => {
         fetchBids(selectedArtwork.artworkId);
       })
