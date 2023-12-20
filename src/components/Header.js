@@ -176,7 +176,36 @@ function Header() {
                   </Typography>
                 </MenuItem>
               ))}
-            </Menu>
+            </Menu> 
+          </Box>
+          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', marginLeft: 'auto', marginBottom: '10px' }}>
+          <Button
+              variant="contained"
+              size="small"
+              sx={{ 
+                marginRight: 2,
+                backgroundColor: "#9c27b0",
+                color: "white",
+                borderRadius: 1,
+              }}
+              component={Link}
+              to="/be-an-artist"
+            >
+              Be an Artist
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{
+                backgroundColor: "#9c27b0",
+                color: "white",
+                borderRadius: 1,
+              }}
+              component={Link}
+              to="/be-a-gallery-owner"
+            >
+              Be a Gallery Owner
+            </Button>
           </Box>
         </Toolbar>
       </Container>
