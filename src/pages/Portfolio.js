@@ -29,7 +29,11 @@ export default function Portfolio() {
   const [newDescription, setNewDescription] = useState("");
 
   useEffect(() => {
-    axiosInstance.get("/art/my")
+    axiosInstance.get(`/art/my`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
       .then(response => setArtworks(response.data.data))
       .catch(error => console.error('Error:', error));
   }, []);
