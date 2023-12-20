@@ -18,13 +18,14 @@ function BeAnArtistDialog() {
   const handleSubmit = () => {
     axiosInstance.post('/artist/create', {
       artistName,
-      age,
+      age: parseInt(age, 10),
       gender,
       nationality,
       speciality
     }, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        'Content-Type': 'application/json'
       },
     })
       .then(response => {
