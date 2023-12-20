@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,6 +10,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+import BeAnArtistDialog from './BeAnArtistDialog';
 
 const pages = [
   "Home",
@@ -23,6 +24,7 @@ const settings = ["Logout"];
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [isArtistDialogOpen, setIsArtistDialogOpen] = useState(false);
 
   const paths = [
     "/home",
@@ -31,6 +33,14 @@ function Header() {
     "/workshops",
     "/collections",
   ];
+
+  const handleOpenArtistDialog = () => {
+    setIsArtistDialogOpen(true);
+  };
+
+  const handleCloseArtistDialog = () => {
+    setIsArtistDialogOpen(false);
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -45,7 +55,7 @@ function Header() {
   };
 
   return (
-    <AppBar
+    <><AppBar
       position="static"
       sx={{ backgroundColor: "#431075", height: "7vh" }}
     >
@@ -176,23 +186,10 @@ function Header() {
                   </Typography>
                 </MenuItem>
               ))}
-            </Menu> 
+            </Menu>
           </Box>
           <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', marginLeft: 'auto', marginBottom: '10px' }}>
-          <Button
-              variant="contained"
-              size="small"
-              sx={{ 
-                marginRight: 2,
-                backgroundColor: "#9c27b0",
-                color: "white",
-                borderRadius: 1,
-              }}
-              component={Link}
-              to="/be-an-artist"
-            >
-              Be an Artist
-            </Button>
+            <BeAnArtistDialog open={isArtistDialogOpen} onClose={handleCloseArtistDialog} />
             <Button
               variant="contained"
               size="small"
@@ -209,7 +206,7 @@ function Header() {
           </Box>
         </Toolbar>
       </Container>
-    </AppBar>
+    </AppBar></>
   );
 }
 export default Header;
