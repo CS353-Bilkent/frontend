@@ -123,7 +123,7 @@ export default function ArtworkDetail() {
           }}
           component={Paper}
         >
-          <Button variant="contained" onClick={handleOpenDialog}>
+          <Button sx={{ backgroundColor: "#246d82" }} variant="contained" onClick={handleOpenDialog}>
         Add to Collection
       </Button>
       <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
