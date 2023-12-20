@@ -62,6 +62,11 @@ export default function Portfolio() {
       .catch(error => console.error('Error:', error));
   };
 
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setNewDescription("");
+  };
+
   const handleUpdateDescription = () => {
     axiosInstance.put(`/art/${selectedArtwork.artworkId}`, { newDescription }, {
       headers: {
@@ -69,11 +74,23 @@ export default function Portfolio() {
       },
     })
       .then(response => {
-        setOpenDialog(false);
-        // Optionally, refresh artworks or update state
+        const updatedArtworks = artworks.map(artwork => {
+          if (artwork.artworkDto.artworkId === selectedArtwork.artworkId) {
+            return {
+              ...artwork,
+              artworkDto: {
+                ...artwork.artworkDto,
+                artworkDescription: newDescription
+              }
+            };
+          }
+          return artwork;
+        });
+        setArtworks(updatedArtworks);
+        handleCloseDialog();
       })
       .catch(error => console.error('Error:', error));
-  };  
+  };
 
   const handleApproveRejectBid = (bidId, approve) => {
     const apiEndpoint = approve ? `/bid/approve/${bidId}` : `/bid/reject/${bidId}`;
