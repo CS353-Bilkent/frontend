@@ -17,6 +17,7 @@ import axiosInstance from "../service/axiosInterceptor";
 export default function Home() {
   const navigate = useNavigate();
   const [artworks, setArtworks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     axiosInstance
@@ -31,6 +32,14 @@ export default function Home() {
       })
       .catch((error) => console.error("Error:", error));
   }, []);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value.toLowerCase());
+  };
+
+  const filteredArtworks = artworks.filter((artwork) =>
+    artwork.artworkDto.artworkName.toLowerCase().includes(searchTerm)
+  );
 
   return (
     <>
@@ -80,6 +89,7 @@ export default function Home() {
               }}
               placeholder="Search Artworks"
               inputProps={{ "aria-label": "Search artworks" }}
+              onChange={handleSearchChange} // Add onChange event
             />
             <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
               <SearchIcon />
@@ -98,7 +108,7 @@ export default function Home() {
             width: "100vw",
           }}
         >
-          {artworks.map((artwork) => (
+          {filteredArtworks.map((artwork) => (
             <Grid
               key={artwork.artworkDto.artworkId}
               item
