@@ -1,16 +1,23 @@
+import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Paper } from "@mui/material";
 import Header from "../components/Header";
+import axiosInstance from "../service/axiosInterceptor";
 
 export default function Notifications() {
-  const notifications = [
-    { content: "Emre B. bidded on your artwork 'The Tortoise Trainer'." },
-    { content: "Emre B. bidded on your artwork 'The Tortoise Trainer'." },
-    { content: "Emre B. bidded on your artwork 'The Tortoise Trainer'." },
-    { content: "Emre B. bidded on your artwork 'The Tortoise Trainer'." },
-    { content: "Emre B. bidded on your artwork 'The Tortoise Trainer'." },
-    { content: "Emre B. bidded on your artwork 'The Tortoise Trainer'." },
-    { content: "Emre B. bidded on your artwork 'The Tortoise Trainer'." },
-  ];
+  const [notifications, setNotifications] = useState([]);
+  
+  useEffect(() => {
+    axiosInstance.get("/notification/my", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
+    .then(response => {
+      setNotifications(response.data.data);
+    })
+    .catch(error => console.error("Error fetching notifications:", error));
+  }, []);
+
   return (
     <>
       <Header />
@@ -47,8 +54,9 @@ export default function Notifications() {
           >
             Notifications
           </Typography>
-          {notifications.map((notification) => (
+          {notifications.map((notification, index) => (
             <Grid
+              key={index}
               component={Paper}
               sx={{
                 p: 2,
