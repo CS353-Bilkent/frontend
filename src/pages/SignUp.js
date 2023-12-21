@@ -58,7 +58,7 @@ function SignUp() {
         email: data.get("email"),
         password: data.get("password"),
       });
-      navigate("/login");
+      navigate("/");
       console.log("res", res);
     } catch (err) {
       console.log("err", err);
