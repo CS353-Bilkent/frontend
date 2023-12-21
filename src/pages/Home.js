@@ -72,6 +72,7 @@ export default function Home() {
           fontWeight: 200,
           fontSize: 36,
           marginTop: "2vh",
+          marginBottom: "2vh",
         }}>Explore and Embrace Art in Artion</Typography>
         
         {/* First Row of Filters */}
