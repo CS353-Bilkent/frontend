@@ -21,6 +21,50 @@ export default function ArtworkDetail() {
       : null;
   const [collections, setCollections] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [auctionId, setAuctionId] = useState(null);
+  const [bidAmount, setBidAmount] = useState('');
+
+  const handleBidChange = (event) => {
+    setBidAmount(event.target.value);
+  };
+  
+  useEffect(() => {
+    if (artworkId) {
+      axiosInstance.get(`auction/artwork/${artworkId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then(response => {
+        const auctionData = response.data.data;
+        if (auctionData && auctionData.auction) {
+          setAuctionId(auctionData.auction.auctionId);
+        }
+      })
+      .catch(error => console.error("Error fetching auction data:", error));
+    }
+  }, [artworkId]);
+
+  const handleSubmitBid = () => {
+    if (!auctionId || !bidAmount) {
+      console.error("Auction ID or Bid Amount is missing");
+      return;
+    }
+  
+    const bidData = JSON.stringify({ amount: bidAmount });
+    axiosInstance.post(`/bid/${auctionId}`, bidData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(response => {
+      console.log('Bid submitted successfully', response);
+    })
+    .catch(error => {
+      console.error('Error submitting bid:', error);
+    });
+  };    
 
   useEffect(() => {
     const userId = 3; // TODO:
@@ -182,8 +226,15 @@ export default function ArtworkDetail() {
               label="Bid"
               placeholder="Enter bid!"
               sx={{ width: "50%" }}
+              value={bidAmount}
+              onChange={handleBidChange}
             />
-            <Button sx={{ backgroundColor: "#246d82" }} variant="contained">
+            <Button 
+              sx={{ backgroundColor: "#246d82" }} 
+              variant="contained" 
+              onClick={handleSubmitBid}
+              disabled={!auctionId}
+            >
               Submit Bid
             </Button>
           </Grid>
