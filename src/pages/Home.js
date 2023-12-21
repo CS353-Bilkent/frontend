@@ -6,10 +6,9 @@ import {
   CardContent,
   CardMedia,
   InputBase,
+  TextField,
 } from "@mui/material";
 import Header from "../components/Header";
-import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosInstance from "../service/axiosInterceptor";
@@ -18,6 +17,15 @@ export default function Home() {
   const navigate = useNavigate();
   const [artworks, setArtworks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filters, setFilters] = useState({
+    artistName: "",
+    fixedPrice: "",
+    sizeX: "",
+    sizeY: "",
+    sizeZ: "",
+    artworkLocation: "",
+    artworkDescription: "",
+  });
 
   useEffect(() => {
     axiosInstance
@@ -37,65 +45,121 @@ export default function Home() {
     setSearchTerm(event.target.value.toLowerCase());
   };
 
-  const filteredArtworks = artworks.filter((artwork) =>
-    artwork.artworkDto.artworkName.toLowerCase().includes(searchTerm)
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    setFilters(prevFilters => ({ ...prevFilters, [name]: value }));
+  };
+
+  const applyFilters = (artwork) => {
+    return Object.entries(filters).every(([key, value]) => {
+      return value ? artwork.artworkDto[key] && artwork.artworkDto[key].toString().toLowerCase().includes(value.toLowerCase()) : true;
+    });
+  };
+
+  const filteredArtworks = artworks.filter(artwork =>
+    artwork.artworkDto.artworkName.toLowerCase().includes(searchTerm) && applyFilters(artwork)
   );
 
   return (
-    <>
-      <Header />
-      <Grid
-        container
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          p: 2,
-          paddingTop: "2vh",
-          width: "100vw",
-          height: "93vh",
-        }}
-      >
-        <Grid
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            p: 2,
-            gap: "2vh",
-            paddingTop: "2vh",
-          }}
-        >
-          <Typography
-            sx={{
-              fontFamily: "Segoe UI",
-              fontWeight: 200,
-              fontSize: 36,
-              marginTop: "2vh",
-            }}
-          >
-            Explore and Embrace Art in Artion
-          </Typography>
-          <Grid>
+  <>
+    <Header />
+    <Grid container sx={{ width: '100%', padding: 2 }}>
+      
+      {/* Search and Filter Section */}
+      <Grid item xs={12} sx={{ marginBottom: 4 }}>
+        <Typography variant="h4" sx={{ marginBottom: 2 }}>Explore and Embrace Art in Artion</Typography>
+        
+        {/* First Row of Filters */}
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={4}>
             <InputBase
-              sx={{
-                ml: 1,
-                flex: 1,
-                backgroundColor: "#F5F5F5",
-                p: "5px",
-                borderRadius: "5px",
-                width: "50vw",
-              }}
+              sx={{ width: '100%', border: '1px solid #ddd', padding: '5px 10px', borderRadius: 2 }}
               placeholder="Search Artworks"
-              inputProps={{ "aria-label": "Search artworks" }}
-              onChange={handleSearchChange} // Add onChange event
+              inputProps={{ 'aria-label': 'Search artworks' }}
+              onChange={handleSearchChange}
             />
-            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
+          </Grid>
+          <Grid item xs={6} sm={3} md={4}>
+            <TextField
+              label="Artist Name"
+              name="artistName"
+              onChange={handleFilterChange} 
+              variant="outlined"
+              size="small"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={6} sm={3} md={4}>
+            <TextField
+              label="Fixed Price"
+              name="fixedPrice"
+              onChange={handleFilterChange}
+              type="number"
+              variant="outlined"
+              size="small"
+              fullWidth
+            />
+          </Grid>
+          
+        </Grid>
+
+        {/* Second Row of Filters */}
+        <Grid container spacing={2} sx={{ marginTop: 2 }}>
+          <Grid item xs={6} sm={3} md={2}>
+            <TextField
+              label="Size X"
+              name="sizeX"
+              onChange={handleFilterChange}
+              type="number"
+              variant="outlined"
+              size="small"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={6} sm={3} md={2}>
+            <TextField
+              label="Size Y"
+              name="sizeY"
+              onChange={handleFilterChange}
+              type="number"
+              variant="outlined"
+              size="small"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={6} sm={3} md={2}>
+            <TextField
+              label="Size Z"
+              name="sizeZ"
+              onChange={handleFilterChange}
+              type="number"
+              variant="outlined"
+              size="small"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={2}>
+            <TextField
+              label="Artwork Location"
+              name="artworkLocation"
+              onChange={handleFilterChange}
+              variant="outlined"
+              size="small"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              label="Artwork Description"
+              name="artworkDescription"
+              onChange={handleFilterChange}
+              variant="outlined"
+              size="small"
+              fullWidth
+            />
           </Grid>
         </Grid>
+      </Grid>
 
         <Grid
           container
