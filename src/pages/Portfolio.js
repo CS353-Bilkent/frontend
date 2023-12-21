@@ -118,7 +118,7 @@ export default function Portfolio() {
       >
         My Portfolio
       </Typography>
-      <Grid container spacing={4} style={{ padding: 24 }}>
+      <Grid container spacing={4} style={{ padding: 24, justifyContent: "center", alignItems: "center"}}>
         {artworks.map((artwork, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Card>

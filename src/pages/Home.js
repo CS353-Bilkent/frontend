@@ -67,7 +67,12 @@ export default function Home() {
       
       {/* Search and Filter Section */}
       <Grid item xs={12} sx={{ marginBottom: 4 }}>
-        <Typography variant="h4" sx={{ marginBottom: 2 }}>Explore and Embrace Art in Artion</Typography>
+        <Typography variant="h4"         sx={{
+          fontFamily: "Segoe UI",
+          fontWeight: 200,
+          fontSize: 36,
+          marginTop: "2vh",
+        }}>Explore and Embrace Art in Artion</Typography>
         
         {/* First Row of Filters */}
         <Grid container spacing={2}>
