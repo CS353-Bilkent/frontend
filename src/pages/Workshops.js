@@ -20,7 +20,7 @@ export default function Workshops() {
   const [userType, setUserType] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
 
-  useEffect(() => {
+  const fetchWorkshops = () => {
     axiosInstance.get("/workshop/all", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -30,7 +30,11 @@ export default function Workshops() {
       setWorkshops(response.data);
     })
     .catch(error => console.error("Error fetching workshops:", error));
+  };
 
+  useEffect(() => {
+    fetchWorkshops();
+  
     axiosInstance.post("/user/me", {}, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -39,7 +43,7 @@ export default function Workshops() {
     .then(response => {
       setUserType(response.data.data.userType);
     })
-    .catch(error => console.error("Error fetching user data:", error));    
+    .catch(error => console.error("Error fetching user data:", error)); 
   }, []);
 
   const handleDialogOpen = () => {
@@ -48,6 +52,7 @@ export default function Workshops() {
 
   const handleDialogClose = () => {
     setOpenDialog(false);
+    fetchWorkshops();
   };
 
   return (
@@ -66,7 +71,7 @@ export default function Workshops() {
               </Button>
             )}
 
-            <AddWorkshopDialog open={openDialog} onClose={handleDialogClose} />
+            <AddWorkshopDialog open={openDialog} onClose={handleDialogClose} onWorkshopAdded={fetchWorkshops} />
             </IconButton>
           </Grid>
         </Grid>

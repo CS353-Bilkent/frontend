@@ -6,12 +6,12 @@ import {
   DialogTitle,
   Button,
   TextField,
-  MenuItem
 } from "@mui/material";
 import { LocalizationProvider, DateTimePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import axiosInstance from '../service/axiosInterceptor';
 
-const AddWorkshopDialog = ({ open, onClose }) => {
+const AddWorkshopDialog = ({ open, onClose, onWorkshopAdded }) => {
   const [workshopDetails, setWorkshopDetails] = useState({
     workshopDescription: '',
     dateTime: new Date(),
@@ -28,11 +28,26 @@ const AddWorkshopDialog = ({ open, onClose }) => {
   };
 
   const handleSubmit = () => {
-    // Submit form data
-    console.log(workshopDetails);
-    onClose();
+    const requestData = {
+      ...workshopDetails,
+      dateTime: workshopDetails.dateTime.toISOString(),
+    };
+  
+    axiosInstance.post('/workshop/create', requestData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
+    .then(response => {
+      onClose();
+      if (onWorkshopAdded) {
+        onWorkshopAdded();
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
   };
-
 
   return (
     <Dialog open={open} onClose={onClose}>
