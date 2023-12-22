@@ -31,7 +31,7 @@ export default function Workshops() {
     })
     .catch(error => console.error("Error fetching workshops:", error));
 
-    axiosInstance.post("/user/me", {
+    axiosInstance.post("/user/me", {}, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
@@ -39,7 +39,7 @@ export default function Workshops() {
     .then(response => {
       setUserType(response.data.userType);
     })
-    .catch(error => console.error("Error fetching user data:", error));
+    .catch(error => console.error("Error fetching user data:", error));    
   }, []);
 
   const handleDialogOpen = () => {
