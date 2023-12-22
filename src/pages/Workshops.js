@@ -37,7 +37,7 @@ export default function Workshops() {
       },
     })
     .then(response => {
-      setUserType(response.data.userType);
+      setUserType(response.data.data.userType);
     })
     .catch(error => console.error("Error fetching user data:", error));    
   }, []);
