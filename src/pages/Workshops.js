@@ -12,9 +12,13 @@ import Header from "../components/Header";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import axiosInstance from "../service/axiosInterceptor";
+import Button from '@mui/material/Button';
+import AddWorkshopDialog from "../components/AddWorkshopDialog";
 
 export default function Workshops() {
   const [workshops, setWorkshops] = useState([]);
+  const [userType, setUserType] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     axiosInstance.get("/workshop/all", {
@@ -26,7 +30,25 @@ export default function Workshops() {
       setWorkshops(response.data);
     })
     .catch(error => console.error("Error fetching workshops:", error));
+
+    axiosInstance.post("/user/me", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
+    .then(response => {
+      setUserType(response.data.userType);
+    })
+    .catch(error => console.error("Error fetching user data:", error));
   }, []);
+
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
 
   return (
     <>
@@ -38,6 +60,13 @@ export default function Workshops() {
             <InputBase sx={{ ml: 1, flex: 1, backgroundColor: "#F5F5F5", p: "5px", borderRadius: "5px", width: "50vw" }} placeholder="Search Workshops" inputProps={{ "aria-label": "Search workshops" }} />
             <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
               <SearchIcon />
+              {userType === "A" && (
+              <Button variant="contained" onClick={handleDialogOpen} sx={{ marginLeft: 2 }}>
+                Add Workshop
+              </Button>
+            )}
+
+            <AddWorkshopDialog open={openDialog} onClose={handleDialogClose} />
             </IconButton>
           </Grid>
         </Grid>
