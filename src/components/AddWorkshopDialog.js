@@ -6,6 +6,8 @@ import {
   DialogTitle,
   Button,
   TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { LocalizationProvider, DateTimePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -106,12 +108,17 @@ const AddWorkshopDialog = ({ open, onClose, onWorkshopAdded }) => {
           onChange={handleChange('capacity')}
         />
         <TextField
+          select
           label="Workshop Type"
           fullWidth
           margin="dense"
           value={workshopDetails.workshopType}
           onChange={handleChange('workshopType')}
-        />
+        >
+          <MenuItem value="WEB">WEB</MenuItem>
+          <MenuItem value="TUT">TUT</MenuItem>
+          <MenuItem value="WRK">WRK</MenuItem>
+        </TextField>
       </DialogContent>
       <DialogActions>
       <Button onClick={onClose}>Cancel</Button>
