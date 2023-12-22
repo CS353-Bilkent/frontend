@@ -17,7 +17,7 @@ import AddWorkshopDialog from "../components/AddWorkshopDialog";
 
 export default function Workshops() {
   const [workshops, setWorkshops] = useState([]);
-  const [userType, setUserType] = useState(null);
+  const [userType, setUserType] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function Workshops() {
             <InputBase sx={{ ml: 1, flex: 1, backgroundColor: "#F5F5F5", p: "5px", borderRadius: "5px", width: "50vw" }} placeholder="Search Workshops" inputProps={{ "aria-label": "Search workshops" }} />
             <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
               <SearchIcon />
-              {userType === "A" && (
+              {userType === "ARTIST" && (
               <Button variant="contained" onClick={handleDialogOpen} sx={{ marginLeft: 2 }}>
                 Add Workshop
               </Button>
