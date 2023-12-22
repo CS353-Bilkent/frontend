@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Grid, Typography, Paper } from "@mui/material";
 import Header from "../components/Header";
 import axiosInstance from "../service/axiosInterceptor";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
-  
+
   useEffect(() => {
-    axiosInstance.get("/notification/my", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    })
-    .then(response => {
-      setNotifications(response.data.data);
-    })
-    .catch(error => console.error("Error fetching notifications:", error));
+    axiosInstance
+      .get("/notification/my", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((response) => {
+        setNotifications(response.data.data);
+        console.log("notifications", response.data);
+      })
+      .catch((error) => console.error("Error fetching notifications:", error));
   }, []);
 
   return (
